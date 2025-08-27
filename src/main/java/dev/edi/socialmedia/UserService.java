@@ -14,6 +14,9 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private JwtService jwtService;
+
     //private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder(12);
 
     public List<User> allUsers() {
@@ -29,5 +32,11 @@ public class UserService {
         //user.setPassword(hashedPassword);
 
         return userRepository.save(user);
+    }
+
+    public Optional<String> login(String email, String password) {
+        return userRepository.findByEmail(email)
+                .filter(user -> password.equals(user.getPassword()))
+                .map(user -> jwtService.generateToken(user.getEmail()));
     }
 }

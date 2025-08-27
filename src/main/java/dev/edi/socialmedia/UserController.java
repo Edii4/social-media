@@ -22,8 +22,13 @@ public class UserController {
     @PostMapping("/register")
     public ResponseEntity<User> registerUser(@RequestBody User user) {
         User newUser = userService.registerUser(user);
-
-
         return ResponseEntity.ok(newUser);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<?> loginUser(@RequestBody User user) {
+        return userService.login(user.getEmail(), user.getPassword())
+                .map(token -> ResponseEntity.ok().body("Bearer" + token))
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password"));
     }
 }
