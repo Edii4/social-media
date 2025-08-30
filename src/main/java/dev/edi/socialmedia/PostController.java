@@ -26,4 +26,19 @@ public class PostController {
     public ResponseEntity<List<PostResponse>> getByUser(@PathVariable String userId) {
         return ResponseEntity.ok(postService.getPostByUser(userId));
     }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<PostResponse>> getById(@PathVariable String id) {
+        return ResponseEntity.ok(postService.getPostById(id));
+    }
+
+    @PostMapping("/{postId}/like")
+    public ResponseEntity<Post> likePost(@PathVariable String postId, @RequestParam String userId) {
+        return ResponseEntity.ok(postService.likePost(postId, userId));
+    }
+
+    @PostMapping("/{postId}/unlike")
+    public ResponseEntity<Post> unlikePost(@PathVariable String postId, @RequestParam String userId) {
+        return ResponseEntity.ok(postService.unlikePost(postId, userId));
+    }
 }

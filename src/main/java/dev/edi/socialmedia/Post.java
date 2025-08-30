@@ -8,11 +8,11 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @Document(collection = "posts")
-@AllArgsConstructor
-@NoArgsConstructor
 public class Post {
     @Id
     private ObjectId id;
@@ -20,6 +20,18 @@ public class Post {
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt = LocalDateTime.now();
+    private List<Like> likes = new ArrayList<>();
+
+    public Post() {}
+
+    public Post(ObjectId id, String userId, String content, String imageUrl, LocalDateTime createdAt, List<Like> likes) {
+        this.id = id;
+        this.userId = userId;
+        this.content = content;
+        this.imageUrl = imageUrl;
+        this.createdAt = createdAt;
+        this.likes = likes;
+    }
 
     public ObjectId getId() {
         return id;
@@ -55,5 +67,9 @@ public class Post {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<Like> getLikes() {
+        return likes;
     }
 }
