@@ -34,7 +34,7 @@ public class PostController {
 
     @PostMapping("/{postId}/like")
     public ResponseEntity<Post> likePost(@PathVariable String postId, @RequestParam String userId) {
-        return ResponseEntity.ok(postService.likePost(postId, userId));
+        return ResponseEntity.ok(postService.likePost(userId, postId));
     }
 
     @PostMapping("/{postId}/unlike")
