@@ -7,13 +7,28 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "likes")
+import java.time.LocalDateTime;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Like {
-    @Id
-    private ObjectId id;
-    private String postId;
     private String userId;
+    private LocalDateTime likedAt = LocalDateTime.now();
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public LocalDateTime getLikedAt() {
+        return likedAt;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setLikedAt(LocalDateTime likedAt) {
+        this.likedAt = likedAt;
+    }
 }

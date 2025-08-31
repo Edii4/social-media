@@ -16,13 +16,18 @@ public class PostResponse {
     private String username;
     private String profilePicUrl;
 
-    public PostResponse(ObjectId id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl) {
+    private int likeCount;
+    private boolean likedByCurrentUser;
+
+    public PostResponse(ObjectId id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl, int likeCount, boolean likedByCurrentUser) {
         this.id = id;
         this.content = content;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
         this.username = username;
         this.profilePicUrl = profilePicUrl;
+        this.likeCount = likeCount;
+        this.likedByCurrentUser = likedByCurrentUser;
     }
 
     public ObjectId getId() {
