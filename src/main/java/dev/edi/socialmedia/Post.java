@@ -21,16 +21,18 @@ public class Post {
     private String imageUrl;
     private LocalDateTime createdAt = LocalDateTime.now();
     private List<Like> likes = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public Post() {}
 
-    public Post(ObjectId id, String userId, String content, String imageUrl, LocalDateTime createdAt, List<Like> likes) {
+    public Post(ObjectId id, String userId, String content, String imageUrl, LocalDateTime createdAt, List<Like> likes, List<Comment> comments) {
         this.id = id;
         this.userId = userId;
         this.content = content;
         this.imageUrl = imageUrl;
         this.createdAt = createdAt;
         this.likes = likes;
+        this.comments = comments;
     }
 
     public ObjectId getId() {
@@ -71,5 +73,13 @@ public class Post {
 
     public List<Like> getLikes() {
         return likes;
+    }
+
+    public List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 }

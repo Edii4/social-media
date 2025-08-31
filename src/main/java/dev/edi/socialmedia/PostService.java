@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -99,6 +100,21 @@ public class PostService {
 
         post.getLikes().removeIf(like -> like.getUserId().equals(userId));
 
+        return postRepository.save(post);
+    }
+
+    public Post addComment(String postId, String userId, String content) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+
+        Comment comment = new Comment(
+                new ObjectId(),
+                userId,
+                content,
+                LocalDateTime.now()
+        );
+
+        post.getComments().add(comment);
         return postRepository.save(post);
     }
 }

@@ -41,4 +41,14 @@ public class PostController {
     public ResponseEntity<Post> unlikePost(@PathVariable String postId, @RequestParam String userId) {
         return ResponseEntity.ok(postService.unlikePost(postId, userId));
     }
+
+    @PostMapping("/{postId}/comment")
+    public ResponseEntity<Post> addComment(
+            @PathVariable String postId,
+            @RequestParam String userId,
+            @RequestParam String content
+    ) {
+        Post updatedPost = postService.addComment(postId, userId, content);
+        return ResponseEntity.ok(updatedPost);
+    }
 }
