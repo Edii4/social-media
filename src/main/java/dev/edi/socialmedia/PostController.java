@@ -52,4 +52,16 @@ public class PostController {
         Post updatedPost = postService.addComment(postId, userId, content);
         return ResponseEntity.ok(updatedPost);
     }
+
+    @GetMapping("/feed/{userId}")
+    public ResponseEntity<List<PostResponse>> getPostByFollowingUsers(@PathVariable String userId) {
+        List<PostResponse> feed = postService.getPostByFollowingUsers(userId);
+        return ResponseEntity.ok(feed);
+    }
+
+    @GetMapping("/liked/{userId}")
+    public ResponseEntity<List<PostResponse>> getLikedPosts(@PathVariable String userId) {
+        List<PostResponse> likedPosts = postService.getLikedPosts(userId);
+        return ResponseEntity.ok(likedPosts);
+    }
 }

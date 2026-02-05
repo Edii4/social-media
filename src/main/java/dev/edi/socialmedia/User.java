@@ -6,6 +6,9 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Document(collection = "users")
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,6 +20,9 @@ public class User {
     private String password;
     private String bio;
     private String profilePicUrl;
+
+    private List<String> followers = new ArrayList<>();
+    private List<String> following = new ArrayList<>();
 
     public User(String username, String email, String password) {
         this.username = username;
@@ -72,5 +78,21 @@ public class User {
 
     public void setProfilePicUrl(String profilePicUrl) {
         this.profilePicUrl = profilePicUrl;
+    }
+
+    public List<String> getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(String followers) {
+        this.followers.add(followers);
+    }
+
+    public List<String> getFollowing() {
+        return following;
+    }
+
+    public void setFollowing(String following) {
+        this.following.add(following);
     }
 }

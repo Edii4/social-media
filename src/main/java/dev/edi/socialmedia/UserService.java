@@ -39,4 +39,52 @@ public class UserService {
                 .filter(user -> password.equals(user.getPassword()))
                 .map(user -> jwtService.generateToken(user.getEmail()));
     }
+
+    public void followUser(String followerId, String followeeId) {
+        if (followerId.equals(followeeId)) return; // cannot follow self
+
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new RuntimeException("Follower not found"));
+
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new RuntimeException("User to follow not found"));
+
+        if (!follower.getFollowing().contains(followeeId)) {
+            follower.getFollowing().add(followeeId);
+        }
+
+        if (!followee.getFollowers().contains(followerId)) {
+            followee.getFollowers().add(followerId);
+        }
+
+        userRepository.save(follower);
+        userRepository.save(followee);
+    }
+
+    public void unfollowUser(String followerId, String followeeId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new RuntimeException("Follower not found"));
+
+        User followee = userRepository.findById(followeeId)
+                .orElseThrow(() -> new RuntimeException("User to unfollow not found"));
+
+        follower.getFollowing().remove(followeeId);
+        followee.getFollowers().remove(followerId);
+
+        userRepository.save(follower);
+        userRepository.save(followee);
+    }
+
+    public List<String> followingUsers(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getFollowing();
+    }
+    public List<String> followers(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        return user.getFollowers();
+    }
 }
