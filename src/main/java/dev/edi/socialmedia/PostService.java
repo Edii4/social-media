@@ -42,22 +42,22 @@ public class PostService {
         }).toList();
     }
 
-    public List<PostResponse> getPostById(String id) {
-        Optional<Post> posts = postRepository.findById(id);
+    public PostResponse getPostById(String id) {
+        Post post = postRepository.findById(new ObjectId(id))
+                .orElseThrow(() -> new RuntimeException("Post not found"));
 
-        return posts.stream().map(post -> {
-            User user = userRepository.findById(post.getUserId()).orElse(null);
-            return new PostResponse(
-                    post.getId(),
-                    post.getContent(),
-                    post.getImageUrl(),
-                    post.getCreatedAt(),
-                    user != null ? user.getUsername() : "Unknown",
-                    user != null ? user.getProfilePicUrl() : null,
-                    post.getLikes().size(),
-                    false
-            );
-        }).toList();
+        User user = userRepository.findById(post.getUserId()).orElse(null);
+
+        return new PostResponse(
+                post.getId(),
+                post.getContent(),
+                post.getImageUrl(),
+                post.getCreatedAt(),
+                user != null ? user.getUsername() : "Unknown",
+                user != null ? user.getProfilePicUrl() : null,
+                post.getLikes().size(),
+                false
+        );
     }
 
     public List<PostResponse> getAllPosts() {
@@ -79,23 +79,27 @@ public class PostService {
     }
 
     public Post likePost(String userId, String postId) {
-        Post post = postRepository.findById(postId)
+        System.out.println("Trying to like post: " + postId + " by user: " + userId);
+        ObjectId objectId = new ObjectId(postId);
+
+        Post post = postRepository.findById(objectId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         boolean alreadyLiked = post.getLikes().stream()
                 .anyMatch(like -> like.getUserId().equals(userId));
 
-        if(!alreadyLiked) {
+        if (!alreadyLiked) {
             Like like = new Like();
             like.setUserId(userId);
             post.getLikes().add(like);
             return postRepository.save(post);
         }
+
         return post;
     }
 
     public Post unlikePost(String userId, String postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findById(new ObjectId(postId))
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         post.getLikes().removeIf(like -> like.getUserId().equals(userId));
@@ -104,7 +108,7 @@ public class PostService {
     }
 
     public Post addComment(String postId, String userId, String content) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findById(new ObjectId(postId))
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = new Comment(

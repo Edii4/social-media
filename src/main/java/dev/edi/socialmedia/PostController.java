@@ -27,13 +27,14 @@ public class PostController {
         return ResponseEntity.ok(postService.getPostByUser(userId));
     }
 
-    @GetMapping("/{postId}")
-    public ResponseEntity<List<PostResponse>> getById(@PathVariable String id) {
-        return ResponseEntity.ok(postService.getPostById(id));
+    @GetMapping("/id/{postId}")
+    public ResponseEntity<PostResponse> getById(@PathVariable String postId) {
+        return ResponseEntity.ok(postService.getPostById(postId));
     }
 
     @PostMapping("/{postId}/like")
     public ResponseEntity<Post> likePost(@PathVariable String postId, @RequestParam String userId) {
+        System.out.println("HIT likePost with postId=" + postId + ", userId=" + userId);
         return ResponseEntity.ok(postService.likePost(userId, postId));
     }
 
