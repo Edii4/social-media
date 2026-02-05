@@ -5,8 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -38,6 +40,56 @@ public class PostService {
                     user != null ? user.getProfilePicUrl() : null,
                     post.getLikes().size(),
                     false
+            );
+        }).toList();
+    }
+
+    public List<PostResponse> getPostByFollowingUsers(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<String> followingIds = user.getFollowing();
+
+        List<Post> posts = postRepository.findAll().stream()
+                .filter(post -> followingIds.contains(post.getUserId()))
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt()))
+                .collect(Collectors.toList());
+
+        return posts.stream().map(post -> {
+            User postUser = userRepository.findById(post.getUserId()).orElse(null);
+            return new PostResponse(
+                    post.getId(),
+                    post.getContent(),
+                    post.getImageUrl(),
+                    post.getCreatedAt(),
+                    postUser != null ? postUser.getUsername() : "Unknown",
+                    postUser != null ? postUser.getProfilePicUrl() : null,
+                    post.getLikes().size(),
+                    false
+            );
+        }).toList();
+    }
+
+    public List<PostResponse> getLikedPosts(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        List<Post> likedPosts = postRepository.findAll().stream()
+                .filter(post -> post.getLikes().stream()
+                        .anyMatch(like -> like.getUserId().equals(userId)))
+                .sorted((a, b) -> b.getCreatedAt().compareTo(a.getCreatedAt())) // newest first
+                .collect(Collectors.toList());
+
+        return likedPosts.stream().map(post -> {
+            User postUser = userRepository.findById(post.getUserId()).orElse(null);
+
+            return new PostResponse(
+                    post.getId(),
+                    post.getContent(),
+                    post.getImageUrl(),
+                    post.getCreatedAt(),
+                    postUser != null ? postUser.getUsername() : "Unknown",
+                    postUser != null ? postUser.getProfilePicUrl() : null,
+                    post.getLikes().size(),
+                    true // likedByCurrentUser is always true here
             );
         }).toList();
     }
