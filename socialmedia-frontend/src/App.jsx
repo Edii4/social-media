@@ -1,15 +1,17 @@
-import { useEffect } from "react";
-import api from "./api/api";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
+import Login from "./pages/Login";
 
 function App() {
-
-    useEffect(() => {
-        api.get("/posts")
-            .then(res => console.log(res.data))
-            .catch(err => console.error(err));
-    }, []);
-
-    return <h1>Social Media App</h1>;
+    return (
+        <Router>
+            <Routes>
+                <Route path="/register" element={<Register />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/" element={<h1>Welcome to Social Media App</h1>} />
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
