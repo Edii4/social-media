@@ -1,0 +1,13 @@
+package dev.edi.socialmedia;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+@Repository
+public interface PostRepository extends MongoRepository<Post, ObjectId> {
+    List<Post> findByUserId(String userId);
+    //List<Post> findById(ObjectId id);
+}
