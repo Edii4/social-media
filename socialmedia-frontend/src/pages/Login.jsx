@@ -1,5 +1,6 @@
 import { useState } from "react";
 import api from "../api/api";
+import { setToken, setUser } from "../utils/auth.js"
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState("");
@@ -10,13 +11,16 @@ function Login({ onLogin }) {
         e.preventDefault();
         try {
             const response = await api.post("/users/login", { email, password });
-            setMessage("Login successful!");
-            console.log(response.data);
+            console.log("LOGIN RESPONSE:", response.data);
 
-            // If backend returns a token later, you can store it:
-            // localStorage.setItem("token", response.data.token);
+            setToken(response.data.token);
 
-            if (onLogin) onLogin(response.data);
+            setUser({
+                userId: response.data.userId,
+                username: response.data.username,
+            });
+
+            if(onLogin) onLogin();
         } catch (err) {
             console.error(err);
             setMessage("Login failed. Check your credentials.");
