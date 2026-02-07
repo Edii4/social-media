@@ -34,10 +34,14 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public Optional<String> login(String email, String password) {
+    public Optional<LoginResponse> login(String email, String password) {
         return userRepository.findByEmail(email)
                 .filter(user -> password.equals(user.getPassword()))
-                .map(user -> jwtService.generateToken(user.getEmail()));
+                .map(user -> new LoginResponse(
+                        "Bearer " + jwtService.generateToken(user.getEmail()),
+                        user.getId().toString(),
+                        user.getUsername()
+                ));
     }
 
     public void followUser(String followerId, String followeeId) {

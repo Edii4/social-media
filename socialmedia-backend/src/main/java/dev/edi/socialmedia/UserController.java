@@ -26,10 +26,10 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@RequestBody User user) {
-        return userService.login(user.getEmail(), user.getPassword())
-                .map(token -> ResponseEntity.ok().body("Bearer" + token))
-                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid email or password"));
+    public ResponseEntity<?> loginUser(@RequestBody LoginRequest request) {
+        return userService.login(request.getEmail(), request.getPassword())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
     }
 
     @PostMapping("/{followerId}/follow/{followeeId}")
