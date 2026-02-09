@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PostResponse {
-    private ObjectId id;
+    private String id;
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;
@@ -19,7 +19,7 @@ public class PostResponse {
     private int likeCount;
     private boolean likedByCurrentUser;
 
-    public PostResponse(ObjectId id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl, int likeCount, boolean likedByCurrentUser) {
+    public PostResponse(String id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl, int likeCount, boolean likedByCurrentUser) {
         this.id = id;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -30,7 +30,7 @@ public class PostResponse {
         this.likedByCurrentUser = likedByCurrentUser;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 

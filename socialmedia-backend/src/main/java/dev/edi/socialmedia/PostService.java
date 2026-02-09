@@ -31,8 +31,11 @@ public class PostService {
 
         return posts.stream().map(post -> {
             User user = userRepository.findById(post.getUserId()).orElse(null);
+
+            //boolean likedByCurrentUser = post.getLikes().stream().anyMatch(like -> like.getUserId().equals(currenUserId));
+
             return new PostResponse(
-                    post.getId(),
+                    post.getId().toHexString(),
                     post.getContent(),
                     post.getImageUrl(),
                     post.getCreatedAt(),
@@ -57,7 +60,7 @@ public class PostService {
         return posts.stream().map(post -> {
             User postUser = userRepository.findById(post.getUserId()).orElse(null);
             return new PostResponse(
-                    post.getId(),
+                    post.getId().toHexString(),
                     post.getContent(),
                     post.getImageUrl(),
                     post.getCreatedAt(),
@@ -82,7 +85,7 @@ public class PostService {
             User postUser = userRepository.findById(post.getUserId()).orElse(null);
 
             return new PostResponse(
-                    post.getId(),
+                    post.getId().toHexString(),
                     post.getContent(),
                     post.getImageUrl(),
                     post.getCreatedAt(),
@@ -101,7 +104,7 @@ public class PostService {
         User user = userRepository.findById(post.getUserId()).orElse(null);
 
         return new PostResponse(
-                post.getId(),
+                post.getId().toHexString(),
                 post.getContent(),
                 post.getImageUrl(),
                 post.getCreatedAt(),
@@ -112,20 +115,28 @@ public class PostService {
         );
     }
 
-    public List<PostResponse> getAllPosts() {
+    public List<PostResponse> getAllPosts(String currentUserId) {
         List<Post> posts = postRepository.findAll();
 
         return posts.stream().map(post -> {
             User user = userRepository.findById(post.getUserId()).orElse(null);
+
+            boolean likedByCurrentUser = false;
+            if(currentUserId != null) {
+                likedByCurrentUser = post.getLikes().stream().anyMatch(like -> like.getUserId().equals(currentUserId));
+            }
+            System.out.println(currentUserId);
+            System.out.println("liked: " + likedByCurrentUser);
+
             return new PostResponse(
-                    post.getId(),
+                    post.getId().toHexString(),
                     post.getContent(),
                     post.getImageUrl(),
                     post.getCreatedAt(),
                     user != null ? user.getUsername() : "Unknown",
                     user != null ? user.getProfilePicUrl() : null,
                     post.getLikes().size(),
-                    false
+                    likedByCurrentUser
             );
         }).toList();
     }
@@ -151,7 +162,9 @@ public class PostService {
     }
 
     public Post unlikePost(String userId, String postId) {
-        Post post = postRepository.findById(new ObjectId(postId))
+        ObjectId objectId = new ObjectId(postId);
+
+        Post post = postRepository.findById(objectId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         post.getLikes().removeIf(like -> like.getUserId().equals(userId));

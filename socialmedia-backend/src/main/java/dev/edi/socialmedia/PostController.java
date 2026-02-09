@@ -18,8 +18,8 @@ public class PostController {
     }
 
     @GetMapping
-    public ResponseEntity<List<PostResponse>> getAll() {
-        return ResponseEntity.ok(postService.getAllPosts());
+    public ResponseEntity<List<PostResponse>> getAll(@RequestParam(required = false) String userId) {
+        return ResponseEntity.ok(postService.getAllPosts(userId));
     }
 
     @GetMapping("/users/{userId}")
@@ -40,7 +40,7 @@ public class PostController {
 
     @PostMapping("/{postId}/unlike")
     public ResponseEntity<Post> unlikePost(@PathVariable String postId, @RequestParam String userId) {
-        return ResponseEntity.ok(postService.unlikePost(postId, userId));
+        return ResponseEntity.ok(postService.unlikePost(userId, postId));
     }
 
     @PostMapping("/{postId}/comment")
