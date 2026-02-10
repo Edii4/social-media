@@ -1,11 +1,14 @@
 import { useState } from "react";
 import api from "../api/api";
 import { setToken, setUser } from "../utils/auth.js"
+import { useNavigate } from "react-router-dom";
 
 function Login({ onLogin }) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [message, setMessage] = useState("");
+
+    const navigate = useNavigate();
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -21,6 +24,8 @@ function Login({ onLogin }) {
             });
 
             if(onLogin) onLogin();
+
+            navigate("/feed");
         } catch (err) {
             console.error(err);
             setMessage("Login failed. Check your credentials.");

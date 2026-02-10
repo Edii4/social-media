@@ -1,14 +1,22 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
+import Feed from "./pages/Feed";
+import { isLoggedIn } from "./utils/auth.js";
 
 function App() {
     return (
         <Router>
             <Routes>
+                <Route
+                    path="/"
+                    element={
+                        isLoggedIn() ? <Navigate to="/feed" /> : <Navigate to="/login" />
+                    }
+                />
                 <Route path="/register" element={<Register />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/" element={<h1>Welcome to Social Media App</h1>} />
+                <Route path="/feed" element={<Feed />} />
             </Routes>
         </Router>
     );

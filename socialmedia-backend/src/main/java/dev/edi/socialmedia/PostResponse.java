@@ -5,10 +5,11 @@ import lombok.Data;
 import org.bson.types.ObjectId;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 public class PostResponse {
-    private ObjectId id;
+    private String id;
     private String content;
     private String imageUrl;
     private LocalDateTime createdAt;
@@ -18,8 +19,9 @@ public class PostResponse {
 
     private int likeCount;
     private boolean likedByCurrentUser;
+    private List<CommentResponse> comments;
 
-    public PostResponse(ObjectId id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl, int likeCount, boolean likedByCurrentUser) {
+    public PostResponse(String id, String content, String imageUrl, LocalDateTime createdAt, String username, String profilePicUrl, int likeCount, boolean likedByCurrentUser, List<CommentResponse> comments) {
         this.id = id;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -28,9 +30,10 @@ public class PostResponse {
         this.profilePicUrl = profilePicUrl;
         this.likeCount = likeCount;
         this.likedByCurrentUser = likedByCurrentUser;
+        this.comments = comments;
     }
 
-    public ObjectId getId() {
+    public String getId() {
         return id;
     }
 
