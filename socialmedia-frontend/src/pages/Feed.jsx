@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getUsername, logout, getUserId } from "../utils/auth";
 import api from "../api/api.js"
 import { useNavigate } from "react-router-dom";
+import { formatDistanceToNow } from "date-fns";
 
 
 function Feed() {
@@ -11,6 +12,7 @@ function Feed() {
     const [loading, setLoading] = useState(false);
     const [posts, setPosts] = useState([]);
     const userId = getUserId();
+    const [commentText, setCommentText] = useState({});
 
     useEffect(() => {
         const user = getUsername();
@@ -22,6 +24,21 @@ function Feed() {
             fetchPosts();
         }
     }, [navigate]);
+
+    const handleAddComment = async (postId) => {
+        try {
+            const userId = getUserId();
+            const content = commentText[postId];
+
+            await api.post(`/posts/${postId}/comment?userId=${userId}&content=${content}`);
+
+            setCommentText({ ...commentText, [postId]: "" });
+
+            fetchPosts();
+        } catch (err) {
+            console.log("Comment failed" ,err);
+        }
+    };
 
     const handleToggleLike = async (post) => {
         try {
@@ -35,7 +52,7 @@ function Feed() {
         } catch (err) {
             console.log("Like toggle failed", err);
         }
-    }
+    };
 
     const fetchPosts = async () => {
         try {
@@ -51,7 +68,7 @@ function Feed() {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     const handleLogout = () => {
         logout();
@@ -91,8 +108,8 @@ function Feed() {
                         />
                     )}
 
-                    <small style={{ color: "#666" }}>
-                        {new Date(post.createdAt).toLocaleString()}
+                    <small title={new Date(post.createdAt).toLocaleString()} style={{ color: "#666" }} >
+                        {formatDistanceToNow(new Date(post.createdAt), { addSuffix: true })}
                     </small>
 
                     <div style={{ marginTop: "0.5rem" }}>
@@ -102,6 +119,32 @@ function Feed() {
                     <button onClick={() => handleToggleLike(post)}>
                         {post.likedByCurrentUser ? "Unlike" : "Like"}
                     </button>
+
+                    {post.comments?.map((comment) => (
+                        <div key={comment.id} style={{ display: "flex", gap: "8px" }}>
+                            <img src={comment.profilePicUrl} width="30" />
+                            <div>
+                                <strong>{comment.username}</strong>: {comment.content}
+                                <div style={{ fontSize: "0.8rem", color: "#888" }}>
+                                    {formatDistanceToNow(new Date(comment.createdAt), { addSuffix: true })}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        value={commentText[post.id] || ""}
+                        onChange={(e) =>
+                            setCommentText({ ...commentText, [post.id]: e.target.value })
+                        }
+                    />
+
+                    <button onClick={() => handleAddComment(post.id)}>
+                        Comment
+                    </button>
+
                 </div>
             ))}
         </div>

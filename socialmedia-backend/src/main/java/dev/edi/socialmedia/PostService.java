@@ -34,6 +34,21 @@ public class PostService {
 
             //boolean likedByCurrentUser = post.getLikes().stream().anyMatch(like -> like.getUserId().equals(currenUserId));
 
+            List<CommentResponse> commentResponses = post.getComments().stream().map(comment -> {
+
+                User commentUser = userRepository.findById(comment.getUserId()).orElse(null);
+
+                return new CommentResponse(
+                        comment.getId().toString(),
+                        comment.getUserId(),
+                        commentUser != null ? commentUser.getUsername() : "Unknown",
+                        commentUser != null ? commentUser.getProfilePicUrl() : null,
+                        comment.getContent(),
+                        comment.getTimestamp()
+                );
+
+            }).toList();
+
             return new PostResponse(
                     post.getId().toHexString(),
                     post.getContent(),
@@ -42,7 +57,8 @@ public class PostService {
                     user != null ? user.getUsername() : "Unknown",
                     user != null ? user.getProfilePicUrl() : null,
                     post.getLikes().size(),
-                    false
+                    false,
+                    commentResponses
             );
         }).toList();
     }
@@ -59,6 +75,22 @@ public class PostService {
 
         return posts.stream().map(post -> {
             User postUser = userRepository.findById(post.getUserId()).orElse(null);
+
+            List<CommentResponse> commentResponses = post.getComments().stream().map(comment -> {
+
+                User commentUser = userRepository.findById(comment.getUserId()).orElse(null);
+
+                return new CommentResponse(
+                        comment.getId().toString(),
+                        comment.getUserId(),
+                        commentUser != null ? commentUser.getUsername() : "Unknown",
+                        commentUser != null ? commentUser.getProfilePicUrl() : null,
+                        comment.getContent(),
+                        comment.getTimestamp()
+                );
+
+            }).toList();
+
             return new PostResponse(
                     post.getId().toHexString(),
                     post.getContent(),
@@ -67,7 +99,8 @@ public class PostService {
                     postUser != null ? postUser.getUsername() : "Unknown",
                     postUser != null ? postUser.getProfilePicUrl() : null,
                     post.getLikes().size(),
-                    false
+                    false,
+                    commentResponses
             );
         }).toList();
     }
@@ -84,6 +117,21 @@ public class PostService {
         return likedPosts.stream().map(post -> {
             User postUser = userRepository.findById(post.getUserId()).orElse(null);
 
+            List<CommentResponse> commentResponses = post.getComments().stream().map(comment -> {
+
+                User commentUser = userRepository.findById(comment.getUserId()).orElse(null);
+
+                return new CommentResponse(
+                        comment.getId().toString(),
+                        comment.getUserId(),
+                        commentUser != null ? commentUser.getUsername() : "Unknown",
+                        commentUser != null ? commentUser.getProfilePicUrl() : null,
+                        comment.getContent(),
+                        comment.getTimestamp()
+                );
+
+            }).toList();
+
             return new PostResponse(
                     post.getId().toHexString(),
                     post.getContent(),
@@ -92,7 +140,8 @@ public class PostService {
                     postUser != null ? postUser.getUsername() : "Unknown",
                     postUser != null ? postUser.getProfilePicUrl() : null,
                     post.getLikes().size(),
-                    true // likedByCurrentUser is always true here
+                    true, // likedByCurrentUser is always true here
+                    commentResponses
             );
         }).toList();
     }
@@ -103,6 +152,21 @@ public class PostService {
 
         User user = userRepository.findById(post.getUserId()).orElse(null);
 
+        List<CommentResponse> commentResponses = post.getComments().stream().map(comment -> {
+
+            User commentUser = userRepository.findById(comment.getUserId()).orElse(null);
+
+            return new CommentResponse(
+                    comment.getId().toString(),
+                    comment.getUserId(),
+                    commentUser != null ? commentUser.getUsername() : "Unknown",
+                    commentUser != null ? commentUser.getProfilePicUrl() : null,
+                    comment.getContent(),
+                    comment.getTimestamp()
+            );
+
+        }).toList();
+
         return new PostResponse(
                 post.getId().toHexString(),
                 post.getContent(),
@@ -111,7 +175,8 @@ public class PostService {
                 user != null ? user.getUsername() : "Unknown",
                 user != null ? user.getProfilePicUrl() : null,
                 post.getLikes().size(),
-                false
+                false,
+                commentResponses
         );
     }
 
@@ -120,6 +185,21 @@ public class PostService {
 
         return posts.stream().map(post -> {
             User user = userRepository.findById(post.getUserId()).orElse(null);
+
+            List<CommentResponse> commentResponses = post.getComments().stream().map(comment -> {
+
+                User commentUser = userRepository.findById(comment.getUserId()).orElse(null);
+
+                return new CommentResponse(
+                        comment.getId().toString(),
+                        comment.getUserId(),
+                        commentUser != null ? commentUser.getUsername() : "Unknown",
+                        commentUser != null ? commentUser.getProfilePicUrl() : null,
+                        comment.getContent(),
+                        comment.getTimestamp()
+                );
+
+            }).toList();
 
             boolean likedByCurrentUser = false;
             if(currentUserId != null) {
@@ -136,7 +216,8 @@ public class PostService {
                     user != null ? user.getUsername() : "Unknown",
                     user != null ? user.getProfilePicUrl() : null,
                     post.getLikes().size(),
-                    likedByCurrentUser
+                    likedByCurrentUser,
+                    commentResponses
             );
         }).toList();
     }
