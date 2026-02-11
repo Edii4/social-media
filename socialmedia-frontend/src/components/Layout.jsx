@@ -4,7 +4,7 @@ import { isLoggedIn } from "../utils/auth";
 
 function Layout() {
     if (!isLoggedIn()) {
-        return null;
+        return <Navigate to="/login" />;
     }
 
     return (

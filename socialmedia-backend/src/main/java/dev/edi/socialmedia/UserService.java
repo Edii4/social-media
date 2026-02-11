@@ -91,4 +91,28 @@ public class UserService {
 
         return user.getFollowers();
     }
+
+    public UserProfileResponse getUserProfile(String profileUserId, String currentUserId) {
+        User user = userRepository.findById(profileUserId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean isFollowing = false;
+
+        if(currentUserId != null) {
+            User currentUser = userRepository.findById(currentUserId).orElse(null);
+
+            if(currentUser != null) {
+                isFollowing = currentUser.getFollowing().contains(profileUserId);
+            }
+        }
+
+        return new UserProfileResponse(
+                user.getId().toHexString(),
+                user.getUsername(),
+                user.getProfilePicUrl(),
+                user.getFollowers().size(),
+                user.getFollowing().size(),
+                isFollowing
+        );
+    }
 }

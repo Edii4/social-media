@@ -53,4 +53,9 @@ public class UserController {
     public ResponseEntity<List<String>> getFollowers(@PathVariable String userId) {
         return new ResponseEntity<List<String>>(userService.followers(userId), HttpStatus.OK);
     }
+
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserProfileResponse> getUserProfile(@PathVariable String userId, @RequestParam(required = false) String currentUserId) {
+        return ResponseEntity.ok(userService.getUserProfile(userId, currentUserId));
+    }
 }

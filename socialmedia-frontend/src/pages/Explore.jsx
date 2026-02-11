@@ -17,14 +17,10 @@ function Explore() {
 
     useEffect(() => {
         const user = getUsername();
-        if (!user) {
-            // If no user, redirect to login
-            navigate("/login");
-        } else {
-            setUsername(user);
-            fetchPosts();
-        }
-    }, [navigate]);
+        setUsername(user);
+        fetchPosts();
+
+    });
 
     const handleAddComment = async (postId) => {
         try {

@@ -5,6 +5,7 @@ import Feed from "./pages/Feed";
 import Explore from "./pages/Explore";
 import { isLoggedIn } from "./utils/auth.js";
 import Layout from "./components/Layout.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
     return (
@@ -26,6 +27,7 @@ function App() {
                 <Route element={<Layout />}>
                     <Route path="/feed" element={<Feed />} />
                     <Route path="/explore" element={<Explore />} />
+                    <Route path="/profile/:userId" element={<Profile />} />
                     {/* Add more protected routes here later */}
                     {/* <Route path="/profile" element={<Profile />} /> */}
                 </Route>
