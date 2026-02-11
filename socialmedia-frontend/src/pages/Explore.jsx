@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import Header from "../components/Header.jsx";
 
 
-function Feed() {
+function Explore() {
     const [username, setUsername] = useState("");
     const navigate = useNavigate();
     const [error, setError] = useState("");
@@ -59,7 +59,7 @@ function Feed() {
         try {
             const userId = getUserId();
 
-            const res = await api.get(`/posts/feed/${userId}?userId=${userId}`);
+            const res = await api.get(`/posts?userId=${userId}`);
             console.log("CURRENT USER ID:", userId);
             setPosts(res.data);
             console.log("FETCH POSTS RESPONSE:", res.data);
@@ -78,7 +78,7 @@ function Feed() {
         <>
             <div style={{ maxWidth: "600px", margin: "0 auto", padding: "2rem" }}>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <h2>My Feed</h2>
+                    <h2>Explore</h2>
                 </div>
 
                 {posts.length === 0 && <p>No posts yet.</p>}
@@ -148,4 +148,4 @@ function Feed() {
     );
 }
 
-export default Feed;
+export default Explore;
