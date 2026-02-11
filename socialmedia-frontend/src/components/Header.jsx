@@ -25,6 +25,7 @@ function Header() {
 
             <div style={{ display: "flex", gap: "1rem" }}>
                 <Link to="/feed">Feed</Link>
+                <Link to="/explore">Explore</Link>
                 <Link to="/profile">Profile</Link>
             </div>
 
