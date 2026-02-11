@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { getUsername, logout } from "../utils/auth";
+import { getUsername, logout, getUserId } from "../utils/auth";
 
 function Header() {
     const navigate = useNavigate();
@@ -26,7 +26,7 @@ function Header() {
             <div style={{ display: "flex", gap: "1rem" }}>
                 <Link to="/feed">Feed</Link>
                 <Link to="/explore">Explore</Link>
-                <Link to="/profile">Profile</Link>
+                <Link to={`/profile/${getUserId()}`}>Profile</Link>
             </div>
 
             <div style={{ display: "flex", gap: "1rem", alignItems: "center" }}>
