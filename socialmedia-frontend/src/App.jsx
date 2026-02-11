@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Feed from "./pages/Feed";
+import Explore from "./pages/Explore";
 import { isLoggedIn } from "./utils/auth.js";
 import Layout from "./components/Layout.jsx";
 
@@ -24,6 +25,7 @@ function App() {
                 {/* Protected routes */}
                 <Route element={<Layout />}>
                     <Route path="/feed" element={<Feed />} />
+                    <Route path="/explore" element={<Explore />} />
                     {/* Add more protected routes here later */}
                     {/* <Route path="/profile" element={<Profile />} /> */}
                 </Route>
